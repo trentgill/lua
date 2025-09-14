@@ -129,8 +129,17 @@ LUALIB_API void (luaL_requiref) (lua_State *L, const char *modname,
 #define luaL_dofile(L, fn) \
 	(luaL_loadfile(L, fn) || lua_pcall(L, 0, LUA_MULTRET, 0))
 
-#define luaL_dostring(L, s) \
-	(luaL_loadstring(L, s) || lua_pcall(L, 0, LUA_MULTRET, 0))
+/*
+ #define luaL_dostring(L, s) \
+ 	(luaL_loadstring(L, s) || lua_pcall(L, 0, LUA_MULTRET, 0))
+  */
+
+// we redefine the luaL_dostring macro to be a static inline func to quiet compiler warning
+// luaL_loadstring always returns LUA_OK so triggers "-Wunused-value"
+static inline int luaL_dostring(lua_State* L, const char* s){
+  luaL_loadstring(L, s);
+  return lua_pcall(L, 0, LUA_MULTRET, 0);
+}
 
 #define luaL_getmetatable(L,n)	(lua_getfield(L, LUA_REGISTRYINDEX, (n)))
 
