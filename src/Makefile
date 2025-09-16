@@ -8,7 +8,7 @@ PLAT= none
 
 
 # CC=/opt/gcc-arm-eabi-6-2017-q1/bin/arm-none-eabi-gcc 
-CC= gcc -std=gnu99 -DLUA_COMPAT_5_2 -DLUA_32BITS $(SYSCFLAGS) $(MYCFLAGS)
+CC= gcc -std=gnu99 -DLUA_32BITS $(SYSCFLAGS) $(MYCFLAGS)
 # CFLAGS= -O2 -Wall -Wextra -DLUA_COMPAT_5_2 $(SYSCFLAGS) $(MYCFLAGS)
 LDFLAGS= $(SYSLDFLAGS) $(MYLDFLAGS)
 LIBS= -lm $(SYSLIBS) $(MYLIBS)
