@@ -105,10 +105,39 @@ static TString *LoadString (LoadState *S) {
 
 
 static void LoadCode (LoadState *S, Proto *f) {
+  // normal lua version that loads code into RAM
+  
+#ifndef BYTECODE_IN_FLASH
   int n = LoadInt(S);
   f->code = luaM_newvector(S->L, n, Instruction);
   f->sizecode = n;
   LoadVector(S, f->code, n);
+  f->flash = 0;
+
+#else // BYTECODE_IN_FLASH = TRUE
+  // custom flash loader where code stays in flash and store a pointer
+  int n = LoadInt(S);
+  if(!n){
+    f->code = NULL;
+    f->flash = 0;
+  }
+  f->sizecode = n;
+
+  size_t bytesize = (size_t)n * sizeof(Instruction);
+  if(S->Z->n < bytesize){ // ensure instruction block fully available
+    luaD_throw(S->L, LUA_ERRSYNTAX);
+  }
+
+  // point code at flash location (current position of ZIO)
+  f->code = (Instruction*)S->Z->p;
+
+  // advance ZIO pointers manually
+  S->Z->p += bytesize;
+  S->Z->n -= bytesize;
+
+  // mark this code as being stored in flash (so it's not freed later)
+  f->flash = 1;
+#endif
 }
 
 
