@@ -8,6 +8,8 @@ DS_Store
 *.elf
 *.d
 *.dmp
+src/lua
+src/luacc
 
 # Precompiled Headers
 *.gch
