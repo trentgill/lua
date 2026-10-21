@@ -104,6 +104,7 @@ Proto *luaF_newproto (lua_State *L) {
   f->p = NULL;
   f->sizep = 0;
   f->code = NULL;
+  f->flash = 0;  /* parser-built code is in RAM; only lundump's XIP path sets 1 */
   f->cache = NULL;
   f->sizecode = 0;
   f->lineinfo = NULL;
